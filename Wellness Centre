@@ -1,0 +1,30 @@
+--drop tables 
+drop table staff cascade constraints;
+drop table physician cascade constraints;
+drop table rNurse cascade constraints;
+drop table nPract cascade constraints;
+drop table medTech cascade constraints;
+drop table pharam cascade constraints;
+drop table surgeon cascade constraints;
+drop table bookKeeper cascade constraints;
+drop table officeAdmin cascade constraints;
+drop table patient cascade constraints;
+drop table diagnosis cascade constraints;
+drop table visit cascade constraints;
+drop table bill cascade constraints;
+drop table prescrip cascade constraints;
+drop table sched cascade constraints;
+drop table staffSched cascade constraints;
+drop table patientSched cascade constraints;
+
+--creating staff table
+create table 'staff' table (
+    staffID         varchar(6)  not null constraint staff_pk primary key, 
+    staffType       char(3)     not null contraint staff_type
+); 
+
+--create physicial table 
+create table 'physician' table(
+    doctorLicNum        number(10)  not null constraint physician_pk primary key,
+    staffID             char(3) 
+);
