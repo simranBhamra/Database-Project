@@ -4,8 +4,9 @@ drop table physician cascade constraints;
 drop table rNurse cascade constraints;
 drop table nPract cascade constraints;
 drop table medTech cascade constraints;
-drop table pharam cascade constraints;
+drop table pharma cascade constraints;
 drop table surgeon cascade constraints;
+drop table recept cascade constraints; 
 drop table bookKeeper cascade constraints;
 drop table officeAdmin cascade constraints;
 drop table patient cascade constraints;
@@ -28,3 +29,27 @@ create table 'physician' table(
     doctorLicNum        number(10)  not null constraint physician_pk primary key,
     staffID             char(3) 
 );
+
+--create registed nurse table
+create table 'rNurse' table (
+    rLicNum         number(10) not null constraint rLicNum_pk primary key,
+    staffID             char(3)
+);
+
+--create nurse practitioner table 
+create table 'nPract' table(
+    practID     number(10) not null constraint practID_pk primary key,
+    staffID             char(3)
+);
+
+--create medical techninican table 
+create table 'medTech' table(
+    medTechLicNum       number(10) not null constraint medTechLicNum_pk primary key,
+    staffID             char(3)
+);
+
+--create pharamcist table 
+create table 'pharma' table(
+    pharmaId            number(10) not null constraint pharmaID_pk primary key,
+    staffID             char(3)
+); 
