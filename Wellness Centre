@@ -145,3 +145,23 @@ create table 'prescrip' table(
     drug        varchar(20) 
 );
 
+--create sched table 
+create table 'sched' table(
+    schedId     varchar(6) sched_pk primary key,
+    schedType   char(1) --come back to this one
+); 
+
+
+--create staff sched table
+create table 'staffSched' table(
+    staffSchedID    number(4) staffSched_pk primary key,
+    staffID         char(3) staffID_fk foreign key, 
+    officeAdminID   number(10) officeAdmin_fk foreign key
+); 
+
+--create patient sched table 
+create table 'patientSched' table(
+    patientID   varchar(6) patient_fk foreign key,
+    patientSched    number(4) patientSched_pk primary key, 
+    officeAdminID   number(10) officeAdmin_fk foreign key
+); 
