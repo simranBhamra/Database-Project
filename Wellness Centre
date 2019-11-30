@@ -105,3 +105,23 @@ create table 'officeAdmin' table(
      staffID             char(3)
 ); 
 
+--create patient table 
+create table 'patient' table (
+    patientID   varchar(6) not null constraint patient_pk primary key,
+    abilityToPay    char(3) --come back to constraints
+);
+
+--create diagnosis table 
+create table 'diagnosis' table(
+    diagnosisID     varchar(6) not null constraint diagnosis_pk primary key,
+    description     varchar(5) not null constraint --come back to others
+);
+
+--create visit table 
+create table 'visit' table(
+    visitID         varchar(6)  not null constraint, visit_pk primary key,
+    visitType       varchar(20) ,
+    diagnosisID     varchar(6) diagnosis_fk foreign key,
+    patientID       varchar(6) patient_fk foreign key,
+    docLicNum       number(10) docLicNum_fk foreign key
+);
