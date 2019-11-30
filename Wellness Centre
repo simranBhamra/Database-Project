@@ -53,3 +53,55 @@ create table 'pharma' table(
     pharmaId            number(10) not null constraint pharmaID_pk primary key,
     staffID             char(3)
 ); 
+
+--create registed nurse table
+create table 'rNurse' table (
+    rLicNum         number(10) not null constraint rLicNum_pk primary key,
+    staffID             char(3)
+);
+
+--create nurse practitioner table 
+create table 'nPract' table(
+    practID     number(10) not null constraint practID_pk primary key,
+    staffID             char(3)
+);
+
+--create medical techninican table 
+create table 'medTech' table(
+    medTechLicNum       number(10) not null constraint medTechLicNum_pk primary key,
+    staffID             char(3)
+);
+
+--create pharamcist table 
+create table 'pharma' table(
+    pharmaId            number(10) not null constraint pharmaID_pk primary key,
+    staffID             char(3)
+); 
+
+
+--create surgeon table 
+create table 'surgeon' table(
+    surgeonID       number(10) not null constraint surgeon_pk primary key,
+     staffID             char(3)
+);
+
+
+--create recept table 
+create table 'recept' table(
+    receptID      number(10) not null constraint recept_pk primary key,
+     staffID             char(3)
+);
+
+
+--create book keeper table 
+create table 'bookKeeper' table (
+    bookKeeperID        number(10) not null constraint bookKeeper_pk primary key,
+     staffID             char(3)
+);
+
+--create office admin table 
+create table 'officeAdmin' table(
+    officeAdminID       number(10) not null constraint officeAdmin_pk primary key,
+     staffID             char(3)
+); 
+
