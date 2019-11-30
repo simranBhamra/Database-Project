@@ -137,3 +137,11 @@ create table 'billing' table(
 
 );
 
+--create prescrip table
+create table 'prescrip' table(
+    patientID       varchar(6) patient_fk foreign key,
+    pharmaId        varchar(6) pharma_fk foreign key, 
+    amount      varchar(10), 
+    drug        varchar(20) 
+);
+
