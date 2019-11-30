@@ -125,3 +125,15 @@ create table 'visit' table(
     patientID       varchar(6) patient_fk foreign key,
     docLicNum       number(10) docLicNum_fk foreign key
 );
+
+--create billing table 
+create table 'billing' table(
+    billingID       varchar(10) billing_pk primary key,
+    amount          number(7,2) not null constraint,
+    payTime         date time,
+    payType         char(3) --come back to this
+    patientID       varchar(6) patient_fk foreign key,
+    bookKeeperID    varchar(6) bookKeeper_fk foreign key
+
+);
+
