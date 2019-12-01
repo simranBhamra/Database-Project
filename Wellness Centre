@@ -165,3 +165,16 @@ create table 'patientSched' table(
     patientSched    number(4) patientSched_pk primary key, 
     officeAdminID   number(10) officeAdmin_fk foreign key
 ); 
+
+
+--loading values into tables
+
+--load values into the staff table 
+insert into staff values (100000,'PHY' );
+insert into staff values (100001, 'RN');
+insert into staff values (100002, 'NP');
+insert into staff values (100003, 'MT'); 
+insert into staff values (100004, 'PHR');
+
+
+
