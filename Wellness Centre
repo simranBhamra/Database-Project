@@ -216,5 +216,23 @@ insert into patient values (111222, 'GHC');
 insert into patient values (223344 ,'INS');
 insert into patient values(333444 , 'OOP'); 
 
+--load values into the diagnosis table 
+insert into diagnosis values (789654, 'Patient came in with a stomach ache',112233 );
+insert into diagnosis values (538543, 'Patient complaning of headache', 123123);
+insert into diagnosis values (378257, 'Patient complaining about chest pain',111222);
+insert into diagnosis values (543534,' Patient has broken wrist', 223344);
+insert into diagnosis values (435425, 'Patient has a sprained ankle' ,333444); 
 
+
+--load values into the vist table 
+
+--load values into the billing table 
+
+--load values into the precription table 
+
+--load values into schedule table 
+
+--load values into staff schedule 
+
+--load values into patient schedule 
 
