@@ -175,6 +175,30 @@ insert into staff values (100001, 'RN');
 insert into staff values (100002, 'NP');
 insert into staff values (100003, 'MT'); 
 insert into staff values (100004, 'PHR');
+insert into staff values(100005, 'SUG');
+insert into staff values(100006, 'REC'); 
+
+--load values into physician table
+insert into physician values ( 1111111111, 100000); 
+
+--load values into registerd nurse table
+insert into rNurse values (2222222222, 100001); 
+
+--load values into nurse practitoner table 
+insert into nPract values (3333333333, 100002); 
+
+--load values into medical tech table 
+insert into medTech values (4444444444, 100003);
+
+--load values into pharam table
+insert into pharma values(5555555555,100004);
+
+--load values into surgeon table 
+insert into surgeon values (6666666666,100005); 
+
+--load values into recept table
+insert into recept values (7777777777, 100006); 
+
 
 
 
