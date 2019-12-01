@@ -114,7 +114,8 @@ create table 'patient' table (
 --create diagnosis table 
 create table 'diagnosis' table(
     diagnosisID     varchar(6) not null constraint diagnosis_pk primary key,
-    description     varchar(5) not null constraint --come back to others
+    description     varchar(5) not null constraint --come back to others,
+    patientID       varchar(6) not null constraint patient_FK foreign key
 );
 
 --create visit table 
@@ -209,4 +210,11 @@ insert into bookKeeper values (8888888888, 100007);
 insert into officeAdmin values (9999999999,100008); 
 
 --load vlaues into patient table
-insert into patient values (112233, 'OOP')
+insert into patient values (112233, 'OOP');
+insert into patient values(123123, 'INS');
+insert into patient values (111222, 'GHC');
+insert into patient values (223344 ,'INS');
+insert into patient values(333444 , 'OOP'); 
+
+
+
