@@ -156,7 +156,8 @@ create table 'sched' table(
 --create staff sched table
 create table 'staffSched' table(
     staffSchedID    number(4) staffSched_pk primary key,
-    staffID         char(3) staffID_fk foreign key, 
+    schedID         varchar(6) sched_fk foreign key,
+    staffID         char(6) staffID_fk foreign key, 
     officeAdminID   number(10) officeAdmin_fk foreign key
 ); 
 
@@ -225,14 +226,23 @@ insert into diagnosis values (435425, 'Patient has a sprained ankle' ,333444);
 
 
 --load values into the vist table 
+insert into visit values (986271,'General visit', 789654, 112233, 1111111111); 
 
 --load values into the billing table 
+insert into billing values(8751225599, 123.65, /*date time */ , 112233,100007); 
 
 --load values into the precription table 
+insert into prescrip values (112233, 100004, 200 , 'Tylenol 3'); 
 
 --load values into schedule table 
+insert into sched values (7583458, 'S'); 
 
 --load values into staff schedule 
+insert into staffSched values (4756, 7583458,100007,100008); 
 
 --load values into patient schedule 
+insert into patientSched values(112233, 8899, 100008);
+
+
+
 
