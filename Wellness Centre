@@ -19,107 +19,109 @@ drop table staffSched cascade constraints;
 drop table patientSched cascade constraints;
 
 --creating staff table
-create table 'staff' table (
-    staffID         varchar(6)  not null constraint staff_pk primary key, 
-    staffType       char(3)     not null contraint staff_type
+create table staf 
+(
+    staffID         varchar(6) not null constraint staff_pk PRIMARY KEY, 
+    staffType       char(3)     not null
 ); 
 
+
 --create physicial table 
-create table 'physician' table(
+create table physician(
     doctorLicNum        number(10)  not null constraint physician_pk primary key,
     staffID             char(6) 
 );
 
 --create registed nurse table
-create table 'rNurse' table (
+create table rNurse(
     rLicNum         number(10) not null constraint rLicNum_pk primary key,
     staffID             char(6)
 );
 
 --create nurse practitioner table 
-create table 'nPract' table(
+create table nPrac(
     practID     number(10) not null constraint practID_pk primary key,
     staffID             char(6)
 );
 
 --create medical techninican table 
-create table 'medTech' table(
+create table medTech(
     medTechLicNum       number(10) not null constraint medTechLicNum_pk primary key,
     staffID             char(6)
 );
 
 --create pharamcist table 
-create table 'pharma' table(
+create table pharma(
     pharmaId            number(10) not null constraint pharmaID_pk primary key,
     staffID             char(6)
 ); 
 
 --create registed nurse table
-create table 'rNurse' table (
+create table rNurse (
     rLicNum         number(10) not null constraint rLicNum_pk primary key,
     staffID             char(6)
 );
 
 --create nurse practitioner table 
-create table 'nPract' table(
+create table nPract(
     practID     number(10) not null constraint practID_pk primary key,
     staffID             char(6)
 );
 
 --create medical techninican table 
-create table 'medTech' table(
+create table medTech(
     medTechLicNum       number(10) not null constraint medTechLicNum_pk primary key,
     staffID             char(6)
 );
 
 --create pharamcist table 
-create table 'pharma' table(
+create table pharma(
     pharmaId            number(10) not null constraint pharmaID_pk primary key,
     staffID             char(6)
 ); 
 
 
 --create surgeon table 
-create table 'surgeon' table(
+create table surgeon(
     surgeonID       number(10) not null constraint surgeon_pk primary key,
      staffID             char(6)
 );
 
 
 --create recept table 
-create table 'recept' table(
+create table recept(
     receptID      number(10) not null constraint recept_pk primary key,
      staffID             char(6)
 );
 
 
 --create book keeper table 
-create table 'bookKeeper' table (
+create table bookKeeper(
     bookKeeperID        number(10) not null constraint bookKeeper_pk primary key,
      staffID             char(6)
 );
 
 --create office admin table 
-create table 'officeAdmin' table(
+create table officeAdmin(
     officeAdminID       number(10) not null constraint officeAdmin_pk primary key,
      staffID             char(6)
 ); 
 
 --create patient table 
-create table 'patient' table (
+create table patient(
     patientID   varchar(6) not null constraint patient_pk primary key,
     abilityToPay    char(3) --come back to constraints
 );
 
 --create diagnosis table 
-create table 'diagnosis' table(
+create table diagnosis(
     diagnosisID     varchar(6) not null constraint diagnosis_pk primary key,
     description     varchar(5) not null constraint --come back to others,
     patientID       varchar(6) not null constraint patient_FK foreign key
 );
 
 --create visit table 
-create table 'visit' table(
+create table visit(
     visitID         varchar(6)  not null constraint, visit_pk primary key,
     visitType       varchar(20) ,
     diagnosisID     varchar(6) diagnosis_fk foreign key,
@@ -128,7 +130,7 @@ create table 'visit' table(
 );
 
 --create billing table 
-create table 'billing' table(
+create table billing(
     billingID       varchar(10) billing_pk primary key,
     amount          number(7,2) not null constraint,
     payTime         date time,
@@ -139,7 +141,7 @@ create table 'billing' table(
 );
 
 --create prescrip table
-create table 'prescrip' table(
+create table prescrip(
     patientID       varchar(6) patient_fk foreign key,
     pharmaId        varchar(6) pharma_fk foreign key, 
     amount      varchar(10), 
@@ -147,14 +149,14 @@ create table 'prescrip' table(
 );
 
 --create sched table 
-create table 'sched' table(
+create table sched(
     schedId     varchar(6) sched_pk primary key,
     schedType   char(1) --come back to this one
 ); 
 
 
 --create staff sched table
-create table 'staffSched' table(
+create table staffSched(
     staffSchedID    number(4) staffSched_pk primary key,
     schedID         varchar(6) sched_fk foreign key,
     staffID         char(6) staffID_fk foreign key, 
@@ -162,11 +164,12 @@ create table 'staffSched' table(
 ); 
 
 --create patient sched table 
-create table 'patientSched' table(
+create table patientSched(
     patientID   varchar(6) patient_fk foreign key,
     patientSched    number(4) patientSched_pk primary key, 
     officeAdminID   number(10) officeAdmin_fk foreign key
 ); 
+
 
 
 --loading values into tables
