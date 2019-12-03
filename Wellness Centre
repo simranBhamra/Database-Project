@@ -18,8 +18,9 @@ drop table sched cascade constraints;
 drop table staffSched cascade constraints;
 drop table patientSched cascade constraints;
 
+
 --creating staff table
-create table staf 
+create table staff
 (
     staffID         varchar(6) not null constraint staff_pk PRIMARY KEY, 
     staffType       char(3)     not null
@@ -109,14 +110,15 @@ create table officeAdmin(
 
 --create patient table 
 create table patient(
-    patientID   varchar(6) not null constraint patient_pk primary key,
+    patientID       varchar(6) not null constraint patient_pk primary key,
+    patientName     varchar(50)not null constraint, 
     abilityToPay    char(3) --come back to constraints
 );
 
 --create diagnosis table 
 create table diagnosis(
     diagnosisID     varchar(6) not null constraint diagnosis_pk primary key,
-    description     varchar(5) not null constraint --come back to others,
+    description     varchar(50) not null constraint --come back to others,
     patientID       varchar(6) not null constraint patient_FK foreign key
 );
 
@@ -171,7 +173,6 @@ create table patientSched(
 ); 
 
 
-
 --loading values into tables
 
 --load values into the staff table 
@@ -214,11 +215,11 @@ insert into bookKeeper values (8888888888, 100007);
 insert into officeAdmin values (9999999999,100008); 
 
 --load vlaues into patient table
-insert into patient values (112233, 'OOP');
-insert into patient values(123123, 'INS');
-insert into patient values (111222, 'GHC');
-insert into patient values (223344 ,'INS');
-insert into patient values(333444 , 'OOP'); 
+insert into patient values (112233,'Tom',  'OOP');
+insert into patient values(123123,'Jerry',  'INS');
+insert into patient values (111222,'Sarah', 'GHC');
+insert into patient values (223344 ,'Brittany' , 'INS');
+insert into patient values(333444 , 'Ben', 'OOP'); 
 
 --load values into the diagnosis table 
 insert into diagnosis values (789654, 'Patient came in with a stomach ache',112233 );
@@ -245,7 +246,3 @@ insert into staffSched values (4756, 7583458,100007,100008);
 
 --load values into patient schedule 
 insert into patientSched values(112233, 8899, 100008);
-
-
-
-
