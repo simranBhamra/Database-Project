@@ -146,3 +146,23 @@ create table sched(
     constraint fk_staffID_sc foreign key(staffID)
     references staff(staffID)
 );
+
+
+--inserting values into the tables
+insert into staff values ('A12345', 'PHY');
+insert into staff values ('A23456', 'PHY');
+insert into staff values ('B12345','NP');
+insert into staff values('B23456','NP');
+insert into staff values('C12345' ,'MT');
+insert into staff values('C23456','MT');
+insert into staff values('D12345','PHR');
+insert into staff values('D23456','PHR');
+insert into staff values('E12345','SUG');
+insert into staff values('E23456','SUG');
+insert into staff values('F12345','BK');
+insert into staff values('F23456','BK');
+insert into staff values('G12345','REC');
+insert into staff values('G23456','REC');
+insert into staff values('H12345','OA');
+insert into staff values('H23456','OA');
+
