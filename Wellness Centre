@@ -148,9 +148,11 @@ create table sched(
 );
 
 
---inserting values into the tables
+--loading values into tables
 insert into staff values ('A12345', 'PHY');
 insert into staff values ('A23456', 'PHY');
+insert into staff values ('I12345','RN');
+insert into staff values('I23456','RN');
 insert into staff values ('B12345','NP');
 insert into staff values('B23456','NP');
 insert into staff values('C12345' ,'MT');
@@ -168,3 +170,6 @@ insert into staff values('H23456','OA');
 
 insert into physician values(1234567891, 'A12345');
 insert into physician values (2345678912, 'A23456');
+
+insert into rNurse values(3456789123,'I12345');
+insert into rNurse values (5678901234, 'I23456');
