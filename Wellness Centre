@@ -195,3 +195,22 @@ insert into bookKeep values(4540983409,'F23456');
 insert into officeAdmin values(4247755090,'H12345');
 insert into officeAdmin values(8844509349, 'H23456');
 
+insert into patient values('AB1234','Benjamin', 'OOP');
+insert into patient values ('AB3456', 'Lily','INS');
+
+insert into diagnosis values('C12345','sore throat','AB1234');
+insert into diagnosis values('C23456','sprained ankle','AB3456');
+
+insert into visit values('GH1234','Body ache','C12345','AB1234',1234567891);
+insert into visit values('GH2345','Injury','C23456','AB3456',2345678912);
+
+insert into bill values(4325667744,200.10, '19-NOV-12','DBC','AB1234',4510983450);
+insert into bill values(4455000912,0.0, '19-DEC-12', 'INS','AB3456',4510983450);
+
+insert into prescription values('cought syrup','AB1234',2233111893, '250ml');
+insert into prescription values('nothing - rice','AB3456',2230099831,'0');
+
+insert into sched values('SCH786','AB1234','online','A12345');
+insert into sched values('SCH345','AB3456','office 1','B12345');
+
+
