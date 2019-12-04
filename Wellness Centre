@@ -166,3 +166,5 @@ insert into staff values('G23456','REC');
 insert into staff values('H12345','OA');
 insert into staff values('H23456','OA');
 
+insert into physician values(1234567891, 'A12345');
+insert into physician values (2345678912, 'A23456');
