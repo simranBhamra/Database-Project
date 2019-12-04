@@ -1,22 +1,23 @@
-drop table staff cascade constraints;
+--droppping and creating tables
+drop table staff cascade constraints; 
 create table staff(
     staffID     varchar(6) not null constraint staffID_pk primary key,
-    staffType   char(3)
+    staffType   char(3) 
 );
 
-drop table physician cascade constraints;
+drop table physician cascade constraints; 
 create table physician(
     docLicNum   number(10) not null constraint docLicNum_pk primary key,
     staffID     varchar (6),
-    constraint fk_staffID_d foreign key(staffID)
+    constraint fk_staffID_d foreign key(staffID) 
     references staff(staffID)
 );
 
-drop table rNurse cascade constraints;
+drop table rNurse cascade constraints; 
 create table rNurse(
     rnLicNum    number(10) not null constraint rnLicNum_pk primary key,
     staffID     varchar (6),
-    constraint fk_staffID_rn foreign key(staffID)
+    constraint fk_staffID_rn foreign key(staffID) 
     references staff(staffID)
 );
 
@@ -24,7 +25,7 @@ drop table npNurse cascade constraints;
 create table npNurse(
     npLicNum    number(10) not null constraint npLicNum_pk primary key,
     staffID     varchar (6),
-    constraint fk_staffID_np foreign key(staffID)
+    constraint fk_staffID_np foreign key(staffID) 
     references staff(staffID)
 );
 
@@ -32,7 +33,7 @@ drop table medTech cascade constraints;
 create table medTech(
     medTechLicNum   number(10) not null constraint medTechLicNum_pk primary key,
     staffID         varchar (6),
-    constraint fk_staffID_mt foreign key(staffID)
+    constraint fk_staffID_mt foreign key(staffID) 
     references staff(staffID)
 );
 
@@ -40,7 +41,7 @@ drop table pharma cascade constraints;
 create table pharma (
     pharmaLicNum    number(10) not null constraint pharmaTechLicNum_pk primary key,
     staffID         varchar (6),
-    constraint fk_staffID_ph foreign key(staffID)
+    constraint fk_staffID_ph foreign key(staffID) 
     references staff(staffID)
 );
 
@@ -48,7 +49,7 @@ drop table surgeon cascade constraints;
 create table surgeon(
     surgeonLicNum   number(10) not null constraint surgeonLicNum_pk primary key,
     staffID         varchar (6),
-    constraint fk_staffID_su foreign key(staffID)
+    constraint fk_staffID_su foreign key(staffID) 
     references staff(staffID)
 );
 
@@ -56,7 +57,7 @@ drop table reception cascade constraints;
 create table reception(
     receptionID     number(10) not null constraint receptionID_pk primary key,
     staffID         varchar (6),
-    constraint fk_staffID_recp foreign key(staffID)
+    constraint fk_staffID_recp foreign key(staffID) 
     references staff(staffID)
 );
 
@@ -64,7 +65,7 @@ drop table bookKeep cascade constraints;
 create table bookKeep(
     bookKeepID    number(10) not null constraint bookKeepID_pk primary key,
     staffID       varchar (6),
-    constraint fk_staffID_bk foreign key(staffID)
+    constraint fk_staffID_bk foreign key(staffID) 
     references staff(staffID)
 );
 
@@ -72,7 +73,7 @@ drop table officeAdmin cascade constraints;
 create table officeAdmin(
     officeAdminID   number(10) not null constraint officeAdmin_pk primary key,
     staffID         varchar (6),
-    constraint fk_staffID_oa foreign key(staffID)
+    constraint fk_staffID_oa foreign key(staffID) 
     references staff(staffID)
 );
 
@@ -106,8 +107,8 @@ create table visit(
     constraint fk_docLicNum_vi foreign key(docLicNum)
     references physician(docLicNum)
 );
-   
-   
+    
+    
 drop table bill cascade constraints;
 create table bill(
     billID      varchar(10) not null constraint billID_pk primary key,
@@ -121,7 +122,7 @@ create table bill(
     constraint fk_bookKeepID_bi foreign key (bookKeepID)
     references bookKeep(bookKeepID)
 );
-   
+    
 drop table prescription cascade constraints;
 create table prescription(
     drug        varchar(20)not null constraint drug_pk primary key,
@@ -133,17 +134,17 @@ create table prescription(
     references pharma(pharmaLicNum),
     amount      varchar(10)
 );
-   
+    
 --do we need patient scheduels ?? or should we just have staff which has appts etc?
 drop table sched cascade constraints;
 create table sched(
     schedID     varchar(6)  not null constraint sched_pk primary key,
     patientID   varchar(6),
     constraint fk_patientID_sc  foreign key(patientID)
-    references patient(patientID),
+    references patient(patientID), 
     apptType        varchar(20),
     staffID         varchar(6),
-    constraint fk_staffID_sc foreign key(staffID)
+    constraint fk_staffID_sc foreign key(staffID) 
     references staff(staffID)
 );
 
@@ -195,6 +196,8 @@ insert into bookKeep values(4540983409,'F23456');
 insert into officeAdmin values(4247755090,'H12345');
 insert into officeAdmin values(8844509349, 'H23456');
 
+
+
 insert into patient values('AB1234','Benjamin', 'OOP');
 insert into patient values ('AB3456', 'Lily','INS');
 
@@ -212,5 +215,40 @@ insert into prescription values('nothing - rice','AB3456',2230099831,'0');
 
 insert into sched values('SCH786','AB1234','online','A12345');
 insert into sched values('SCH345','AB3456','office 1','B12345');
+
+
+
+
+--triggers
+set serveroutput on; 
+
+drop table changelog;
+
+create table changelog(
+    change_date        date,
+    chnage_desc        varchar2(50)
+);
+
+--trigger to update patient
+create or replace trigger patient_update
+    after update on patient
+    for each row
+declare
+    v_action        varchar2(50);
+begin 
+    v_action := 'Updated patient on ' || to_char (sysdate, 'YYYY/MM/DD');
+    insert into changelog values (sysdate, v_action);
+
+end; 
+
+--trigger to insert employee
+
+
+
+--procedures 
+
+--cursors 
+
+
 
 
