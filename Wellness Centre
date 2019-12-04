@@ -1,248 +1,148 @@
---drop tables 
 drop table staff cascade constraints;
+create table staff(
+    staffID     varchar(6) not null constraint staffID_pk primary key,
+    staffType   char(3)
+);
+
 drop table physician cascade constraints;
-drop table rNurse cascade constraints;
-drop table nPract cascade constraints;
-drop table medTech cascade constraints;
-drop table pharma cascade constraints;
-drop table surgeon cascade constraints;
-drop table recept cascade constraints; 
-drop table bookKeeper cascade constraints;
-drop table officeAdmin cascade constraints;
-drop table patient cascade constraints;
-drop table diagnosis cascade constraints;
-drop table visit cascade constraints;
-drop table bill cascade constraints;
-drop table prescrip cascade constraints;
-drop table sched cascade constraints;
-drop table staffSched cascade constraints;
-drop table patientSched cascade constraints;
-
-
---creating staff table
-create table staff
-(
-    staffID         varchar(6) not null constraint staff_pk PRIMARY KEY, 
-    staffType       char(3)     not null
-); 
-
-
---create physicial table 
 create table physician(
-    doctorLicNum        number(10)  not null constraint physician_pk primary key,
-    staffID             char(6) 
+    docLicNum   number(10) not null constraint docLicNum_pk primary key,
+    staffID     varchar (6),
+    constraint fk_staffID_d foreign key(staffID)
+    references staff(staffID)
 );
 
---create registed nurse table
+drop table rNurse cascade constraints;
 create table rNurse(
-    rLicNum         number(10) not null constraint rLicNum_pk primary key,
-    staffID             char(6)
+    rnLicNum    number(10) not null constraint rnLicNum_pk primary key,
+    staffID     varchar (6),
+    constraint fk_staffID_rn foreign key(staffID)
+    references staff(staffID)
 );
 
---create nurse practitioner table 
-create table nPrac(
-    practID     number(10) not null constraint practID_pk primary key,
-    staffID             char(6)
+drop table npNurse cascade constraints;
+create table npNurse(
+    npLicNum    number(10) not null constraint npLicNum_pk primary key,
+    staffID     varchar (6),
+    constraint fk_staffID_np foreign key(staffID)
+    references staff(staffID)
 );
 
---create medical techninican table 
+drop table medTech cascade constraints;
 create table medTech(
-    medTechLicNum       number(10) not null constraint medTechLicNum_pk primary key,
-    staffID             char(6)
+    medTechLicNum   number(10) not null constraint medTechLicNum_pk primary key,
+    staffID         varchar (6),
+    constraint fk_staffID_mt foreign key(staffID)
+    references staff(staffID)
 );
 
---create pharamcist table 
-create table pharma(
-    pharmaId            number(10) not null constraint pharmaID_pk primary key,
-    staffID             char(6)
-); 
-
---create registed nurse table
-create table rNurse (
-    rLicNum         number(10) not null constraint rLicNum_pk primary key,
-    staffID             char(6)
+drop table pharma cascade constraints;
+create table pharma (
+    pharmaLicNum    number(10) not null constraint pharmaTechLicNum_pk primary key,
+    staffID         varchar (6),
+    constraint fk_staffID_ph foreign key(staffID)
+    references staff(staffID)
 );
 
---create nurse practitioner table 
-create table nPract(
-    practID     number(10) not null constraint practID_pk primary key,
-    staffID             char(6)
-);
-
---create medical techninican table 
-create table medTech(
-    medTechLicNum       number(10) not null constraint medTechLicNum_pk primary key,
-    staffID             char(6)
-);
-
---create pharamcist table 
-create table pharma(
-    pharmaId            number(10) not null constraint pharmaID_pk primary key,
-    staffID             char(6)
-); 
-
-
---create surgeon table 
+drop table surgeon cascade constraints;
 create table surgeon(
-    surgeonID       number(10) not null constraint surgeon_pk primary key,
-     staffID             char(6)
+    surgeonLicNum   number(10) not null constraint surgeonLicNum_pk primary key,
+    staffID         varchar (6),
+    constraint fk_staffID_su foreign key(staffID)
+    references staff(staffID)
 );
 
-
---create recept table 
-create table recept(
-    receptID      number(10) not null constraint recept_pk primary key,
-     staffID             char(6)
+drop table reception cascade constraints;
+create table reception(
+    receptionID     number(10) not null constraint receptionID_pk primary key,
+    staffID         varchar (6),
+    constraint fk_staffID_recp foreign key(staffID)
+    references staff(staffID)
 );
 
-
---create book keeper table 
-create table bookKeeper(
-    bookKeeperID        number(10) not null constraint bookKeeper_pk primary key,
-     staffID             char(6)
+drop table bookKeep cascade constraints;
+create table bookKeep(
+    bookKeepID    number(10) not null constraint bookKeepID_pk primary key,
+    staffID       varchar (6),
+    constraint fk_staffID_bk foreign key(staffID)
+    references staff(staffID)
 );
 
---create office admin table 
+drop table officeAdmin cascade constraints;
 create table officeAdmin(
-    officeAdminID       number(10) not null constraint officeAdmin_pk primary key,
-     staffID             char(6)
-); 
+    officeAdminID   number(10) not null constraint officeAdmin_pk primary key,
+    staffID         varchar (6),
+    constraint fk_staffID_oa foreign key(staffID)
+    references staff(staffID)
+);
 
---create patient table 
+drop table patient cascade constraints;
 create table patient(
-    patientID       varchar(6) not null constraint patient_pk primary key,
-    patientName     varchar(50)not null constraint, 
-    abilityToPay    char(3) --come back to constraints
+    patientID       varchar(6) not null constraint patientID_pk primary key,
+    patientName     varchar(50),
+    abillityToPay   char(3)
 );
 
---create diagnosis table 
+drop table diagnosis cascade constraints;
 create table diagnosis(
-    diagnosisID     varchar(6) not null constraint diagnosis_pk primary key,
-    description     varchar(50) not null constraint --come back to others,
-    patientID       varchar(6) not null constraint patient_FK foreign key
+    diagnosisID    varchar(6) not null constraint diagnosis_pk primary key,
+    descrip        varchar(50),
+    patientID      varchar(6),
+    constraint fk_patientID_di  foreign key(patientID)
+    references patient(patientID)
 );
 
---create visit table 
+drop table visit cascade constraints;
 create table visit(
-    visitID         varchar(6)  not null constraint, visit_pk primary key,
-    visitType       varchar(20) ,
-    diagnosisID     varchar(6) diagnosis_fk foreign key,
-    patientID       varchar(6) patient_fk foreign key,
-    docLicNum       number(10) docLicNum_fk foreign key
+    visitID         varchar(6) not null constraint visitID_pk primary key,
+    visitType       varchar(20),
+    diagnosisID     varchar(6),
+    constraint fk_diagnosisID_vi foreign key(diagnosisID)
+    references diagnosis(diagnosisID),
+    patientID       varchar(6),
+    constraint fk_patientID_vi  foreign key(patientID)
+    references patient(patientID),
+    docLicNum       number(10),
+    constraint fk_docLicNum_vi foreign key(docLicNum)
+    references physician(docLicNum)
 );
-
---create billing table 
-create table billing(
-    billingID       varchar(10) billing_pk primary key,
-    amount          number(7,2) not null constraint,
-    payTime         date time,
-    payType         char(3) --come back to this
-    patientID       varchar(6) patient_fk foreign key,
-    bookKeeperID    varchar(6) bookKeeper_fk foreign key
-
+   
+   
+drop table bill cascade constraints;
+create table bill(
+    billID      varchar(10) not null constraint billID_pk primary key,
+    amount      number(7,2),
+    payDate     date,
+    payType     char(3),
+    patientID   varchar(6),
+    constraint fk_patientID_bi  foreign key(patientID)
+    references patient(patientID),
+    bookKeepID  number(10),
+    constraint fk_bookKeepID_bi foreign key (bookKeepID)
+    references bookKeep(bookKeepID)
 );
-
---create prescrip table
-create table prescrip(
-    patientID       varchar(6) patient_fk foreign key,
-    pharmaId        varchar(6) pharma_fk foreign key, 
-    amount      varchar(10), 
-    drug        varchar(20) 
+   
+drop table prescription cascade constraints;
+create table prescription(
+    drug        varchar(20)not null constraint drug_pk primary key,
+    patientID   varchar(6),
+    constraint fk_patientID_pr  foreign key(patientID)
+    references patient(patientID),
+    pharmaLicNum    number(10),
+    constraint fk_pharmaID_pr foreign key (pharmaLicNum)
+    references pharma(pharmaLicNum),
+    amount      varchar(10)
 );
-
---create sched table 
+   
+--do we need patient scheduels ?? or should we just have staff which has appts etc?
+drop table sched cascade constraints;
 create table sched(
-    schedId     varchar(6) sched_pk primary key,
-    schedType   char(1) --come back to this one
-); 
-
-
---create staff sched table
-create table staffSched(
-    staffSchedID    number(4) staffSched_pk primary key,
-    schedID         varchar(6) sched_fk foreign key,
-    staffID         char(6) staffID_fk foreign key, 
-    officeAdminID   number(10) officeAdmin_fk foreign key
-); 
-
---create patient sched table 
-create table patientSched(
-    patientID   varchar(6) patient_fk foreign key,
-    patientSched    number(4) patientSched_pk primary key, 
-    officeAdminID   number(10) officeAdmin_fk foreign key
-); 
-
-
---loading values into tables
-
---load values into the staff table 
-insert into staff values (100000,'PHY' );
-insert into staff values (100001, 'RN');
-insert into staff values (100002, 'NP');
-insert into staff values (100003, 'MT'); 
-insert into staff values (100004, 'PHR');
-insert into staff values(100005, 'SUG');
-insert into staff values(100006, 'REC'); 
-insert into staff values(100007,'BK');
-insert into staff values(100008,'OA'); 
-
---load values into physician table
-insert into physician values ( 1111111111, 100000); 
-
---load values into registerd nurse table
-insert into rNurse values (2222222222, 100001); 
-
---load values into nurse practitoner table 
-insert into nPract values (3333333333, 100002); 
-
---load values into medical tech table 
-insert into medTech values (4444444444, 100003);
-
---load values into pharam table
-insert into pharma values(5555555555,100004);
-
---load values into surgeon table 
-insert into surgeon values (6666666666,100005); 
-
---load values into recept table
-insert into recept values (7777777777, 100006); 
-
-
---load values into bookKeeper table
-insert into bookKeeper values (8888888888, 100007);
-
---load values into officeAdmin table 
-insert into officeAdmin values (9999999999,100008); 
-
---load vlaues into patient table
-insert into patient values (112233,'Tom',  'OOP');
-insert into patient values(123123,'Jerry',  'INS');
-insert into patient values (111222,'Sarah', 'GHC');
-insert into patient values (223344 ,'Brittany' , 'INS');
-insert into patient values(333444 , 'Ben', 'OOP'); 
-
---load values into the diagnosis table 
-insert into diagnosis values (789654, 'Patient came in with a stomach ache',112233 );
-insert into diagnosis values (538543, 'Patient complaning of headache', 123123);
-insert into diagnosis values (378257, 'Patient complaining about chest pain',111222);
-insert into diagnosis values (543534,' Patient has broken wrist', 223344);
-insert into diagnosis values (435425, 'Patient has a sprained ankle' ,333444); 
-
-
---load values into the vist table 
-insert into visit values (986271,'General visit', 789654, 112233, 1111111111); 
-
---load values into the billing table 
-insert into billing values(8751225599, 123.65, /*date time */ , 112233,100007); 
-
---load values into the precription table 
-insert into prescrip values (112233, 100004, 200 , 'Tylenol 3'); 
-
---load values into schedule table 
-insert into sched values (7583458, 'S'); 
-
---load values into staff schedule 
-insert into staffSched values (4756, 7583458,100007,100008); 
-
---load values into patient schedule 
-insert into patientSched values(112233, 8899, 100008);
+    schedID     varchar(6)  not null constraint sched_pk primary key,
+    patientID   varchar(6),
+    constraint fk_patientID_sc  foreign key(patientID)
+    references patient(patientID),
+    apptType        varchar(20),
+    staffID         varchar(6),
+    constraint fk_staffID_sc foreign key(staffID)
+    references staff(staffID)
+);
