@@ -173,3 +173,25 @@ insert into physician values (2345678912, 'A23456');
 
 insert into rNurse values(3456789123,'I12345');
 insert into rNurse values (5678901234, 'I23456');
+
+insert into npNurse values (3958672349, 'B12345');
+insert into npNurse values(4859681230,'B23456');
+
+insert into medTech values (0923899874, 'C12345');
+insert into medTech values(3345900921, 'C23456');
+
+insert into pharma values (2233111893, 'D12345');
+insert into pharma values(2230099831,'D23456');
+
+insert into surgeon values(2223987734,'E12345');
+insert into surgeon values(2299330087,'E23456');
+
+insert into reception values(2299008863,'G12345');
+insert into reception values(8877440834,'G23456');
+
+insert into bookKeep values(4510983450,'F12345');
+insert into bookKeep values(4540983409,'F23456');
+
+insert into officeAdmin values(4247755090,'H12345');
+insert into officeAdmin values(8844509349, 'H23456');
+
