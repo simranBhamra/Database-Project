@@ -241,6 +241,11 @@ begin
 
 end; 
 
+--update patient name
+update patient
+set patientName = 'Lily Dog'
+where patientName = 'Lily'; 
+
 --trigger to insert employee
 
 
