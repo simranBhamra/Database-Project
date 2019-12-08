@@ -7,8 +7,10 @@ create table staff(
 
 drop table physician cascade constraints; 
 create table physician(
-    docLicNum   number(10) not null constraint docLicNum_pk primary key,
-    staffID     varchar (6),
+    docLicNum       number(10) not null constraint docLicNum_pk primary key,
+    email           varchar(20),
+    telephone       number(9),
+    staffID         varchar (6),
     constraint fk_staffID_d foreign key(staffID) 
     references staff(staffID)
 );
@@ -125,14 +127,21 @@ create table bill(
     
 drop table prescription cascade constraints;
 create table prescription(
-    drug        varchar(20)not null constraint drug_pk primary key,
+     drug        varchar(20)not null constraint drug_pk primary key,
     patientID   varchar(6),
     constraint fk_patientID_pr  foreign key(patientID)
     references patient(patientID),
     pharmaLicNum    number(10),
     constraint fk_pharmaID_pr foreign key (pharmaLicNum)
     references pharma(pharmaLicNum),
-    amount      varchar(10)
+    amount      varchar(10),
+    directions  varchar(50),
+    drugForm    varchar(6),
+    strength    varchar(8),
+    rxNumber    number(6),
+    dateFilled  date,
+    oDate       date
+    
 );
     
 --do we need patient scheduels ?? or should we just have staff which has appts etc?
@@ -169,8 +178,8 @@ insert into staff values('G23456','REC');
 insert into staff values('H12345','OA');
 insert into staff values('H23456','OA');
 
-insert into physician values(1234567891, 'A12345');
-insert into physician values (2345678912, 'A23456');
+insert into physician values(1234567891,'eh9988@gmail.com',7217159984, 'A12345');
+insert into physician values (2345678912,'ah8768@gmail.com',876172566, 'A23456');
 
 insert into rNurse values(3456789123,'I12345');
 insert into rNurse values (5678901234, 'I23456');
@@ -210,8 +219,8 @@ insert into visit values('GH2345','Injury','C23456','AB3456',2345678912);
 insert into bill values(4325667744,200.10, '19-NOV-12','DBC','AB1234',4510983450);
 insert into bill values(4455000912,0.0, '19-DEC-12', 'INS','AB3456',4510983450);
 
-insert into prescription values('cought syrup','AB1234',2233111893, '250ml');
-insert into prescription values('nothing - rice','AB3456',2230099831,'0');
+insert into prescription values('cought syrup','AB1234',2233111893, '250ml','Take twice a day','liquid','strong',876345,'12-NOV-19','10-NOV-19');
+insert into prescription values('nothing - rice','AB3456',2230099831,'0g','Everyday for 3 hours','action','strong',000000,'25-NOV-19','20-NOV-19');
 
 insert into sched values('SCH786','AB1234','online','A12345');
 insert into sched values('SCH345','AB3456','office 1','B12345');
@@ -251,6 +260,25 @@ where patientName = 'Lily';
 
 
 --procedures 
+--2 procedures with cursors 
+create or replace procedure list_patient
+is
+    p_patientID     varchar(6);
+    p_patientName   varchar(50); 
+    cursor patient_cur is 
+        select patientID, patientName from patient order by patientID; 
+begin
+    open patient_cur;
+     dbms_output.put_line('Patient ID          Patient Name'); 
+     dbms_output.put_line('--------------------------------');
+    loop
+        fetch patient_cur into p_patientID, p_patientName;
+        exit when patient_cur%notfound; 
+        dbms_output.put_line(p_patientID || '  '|| p_patientName ); 
+    end loop;
+    close patient_cur; 
+end; 
+--2 procedures without cursors 
 
 --cursors 
 
