@@ -1,0 +1,389 @@
+--droppping and creating tables
+drop table staff cascade constraints; 
+create table staff(
+    staffID     varchar(6) not null constraint staffID_pk primary key,
+    staffType   char(3) 
+);
+
+drop table physician cascade constraints; 
+create table physician(
+    docLicNum       number(10) not null constraint docLicNum_pk primary key,
+    email           varchar(20),
+    telephone       number(9),
+    staffID         varchar (6),
+    constraint fk_staffID_d foreign key(staffID) 
+    references staff(staffID)
+);
+
+drop table rNurse cascade constraints; 
+create table rNurse(
+    rnLicNum    number(10) not null constraint rnLicNum_pk primary key,
+    staffID     varchar (6),
+    constraint fk_staffID_rn foreign key(staffID) 
+    references staff(staffID)
+);
+
+drop table npNurse cascade constraints;
+create table npNurse(
+    npLicNum    number(10) not null constraint npLicNum_pk primary key,
+    staffID     varchar (6),
+    constraint fk_staffID_np foreign key(staffID) 
+    references staff(staffID)
+);
+
+drop table medTech cascade constraints;
+create table medTech(
+    medTechLicNum   number(10) not null constraint medTechLicNum_pk primary key,
+    staffID         varchar (6),
+    constraint fk_staffID_mt foreign key(staffID) 
+    references staff(staffID)
+);
+
+drop table pharma cascade constraints;
+create table pharma (
+    pharmaLicNum    number(10) not null constraint pharmaTechLicNum_pk primary key,
+    staffID         varchar (6),
+    constraint fk_staffID_ph foreign key(staffID) 
+    references staff(staffID)
+);
+
+drop table surgeon cascade constraints;
+create table surgeon(
+    surgeonLicNum   number(10) not null constraint surgeonLicNum_pk primary key,
+    staffID         varchar (6),
+    constraint fk_staffID_su foreign key(staffID) 
+    references staff(staffID)
+);
+
+drop table reception cascade constraints;
+create table reception(
+    receptionID     number(10) not null constraint receptionID_pk primary key,
+    staffID         varchar (6),
+    constraint fk_staffID_recp foreign key(staffID) 
+    references staff(staffID)
+);
+
+drop table bookKeep cascade constraints;
+create table bookKeep(
+    bookKeepID    number(10) not null constraint bookKeepID_pk primary key,
+    staffID       varchar (6),
+    constraint fk_staffID_bk foreign key(staffID) 
+    references staff(staffID)
+);
+
+drop table officeAdmin cascade constraints;
+create table officeAdmin(
+    officeAdminID   number(10) not null constraint officeAdmin_pk primary key,
+    staffID         varchar (6),
+    constraint fk_staffID_oa foreign key(staffID) 
+    references staff(staffID)
+);
+
+drop table patient cascade constraints;
+create table patient(
+    patientID       varchar(6) not null constraint patientID_pk primary key,
+    patientName     varchar(50),
+    abillityToPay   char(3)
+);
+
+drop table diagnosis cascade constraints;
+create table diagnosis(
+    diagnosisID    varchar(6) not null constraint diagnosis_pk primary key,
+    descrip        varchar(50),
+    patientID      varchar(6),
+    constraint fk_patientID_di  foreign key(patientID)
+    references patient(patientID)
+);
+
+drop table visit cascade constraints;
+create table visit(
+    visitID         varchar(6) not null constraint visitID_pk primary key,
+    visitType       varchar(20),
+    diagnosisID     varchar(6),
+    constraint fk_diagnosisID_vi foreign key(diagnosisID)
+    references diagnosis(diagnosisID),
+    patientID       varchar(6),
+    constraint fk_patientID_vi  foreign key(patientID)
+    references patient(patientID),
+    docLicNum       number(10),
+    constraint fk_docLicNum_vi foreign key(docLicNum)
+    references physician(docLicNum)
+);
+    
+    
+drop table bill cascade constraints;
+create table bill(
+    billID      varchar(10) not null constraint billID_pk primary key,
+    amount      number(7,2),
+    payDate     date,
+    payType     char(3),
+    patientID   varchar(6),
+    constraint fk_patientID_bi  foreign key(patientID)
+    references patient(patientID),
+    bookKeepID  number(10),
+    constraint fk_bookKeepID_bi foreign key (bookKeepID)
+    references bookKeep(bookKeepID)
+);
+    
+drop table prescription cascade constraints;
+create table prescription(
+     drug        varchar(20)not null constraint drug_pk primary key,
+    patientID   varchar(6),
+    constraint fk_patientID_pr  foreign key(patientID)
+    references patient(patientID),
+    pharmaLicNum    number(10),
+    constraint fk_pharmaID_pr foreign key (pharmaLicNum)
+    references pharma(pharmaLicNum),
+    amount      varchar(10),
+    directions  varchar(50),
+    drugForm    varchar(6),
+    strength    varchar(8),
+    rxNumber    number(6),
+    dateFilled  date,
+    oDate       date
+    
+);
+    
+--do we need patient scheduels ?? or should we just have staff which has appts etc?
+drop table sched cascade constraints;
+create table sched(
+    schedID     varchar(6)  not null constraint sched_pk primary key,
+    patientID   varchar(6),
+    constraint fk_patientID_sc  foreign key(patientID)
+    references patient(patientID), 
+    apptType        varchar(20),
+    staffID         varchar(6),
+    constraint fk_staffID_sc foreign key(staffID) 
+    references staff(staffID)
+);
+
+
+--loading values into tables
+insert into staff values ('A12345', 'PHY');
+insert into staff values ('A23456', 'PHY');
+insert into staff values ('I12345','RN');
+insert into staff values('I23456','RN');
+insert into staff values ('B12345','NP');
+insert into staff values('B23456','NP');
+insert into staff values('C12345' ,'MT');
+insert into staff values('C23456','MT');
+insert into staff values('D12345','PHR');
+insert into staff values('D23456','PHR');
+insert into staff values('E12345','SUG');
+insert into staff values('E23456','SUG');
+insert into staff values('F12345','BK');
+insert into staff values('F23456','BK');
+insert into staff values('G12345','REC');
+insert into staff values('G23456','REC');
+insert into staff values('H12345','OA');
+insert into staff values('H23456','OA');
+
+insert into physician values(1234567891,'eh9988@gmail.com',7217159984, 'A12345');
+insert into physician values (2345678912,'ah8768@gmail.com',876172566, 'A23456');
+
+insert into rNurse values(3456789123,'I12345');
+insert into rNurse values (5678901234, 'I23456');
+
+insert into npNurse values (3958672349, 'B12345');
+insert into npNurse values(4859681230,'B23456');
+
+insert into medTech values (0923899874, 'C12345');
+insert into medTech values(3345900921, 'C23456');
+
+insert into pharma values (2233111893, 'D12345');
+insert into pharma values(2230099831,'D23456');
+
+insert into surgeon values(2223987734,'E12345');
+insert into surgeon values(2299330087,'E23456');
+
+insert into reception values(2299008863,'G12345');
+insert into reception values(8877440834,'G23456');
+
+insert into bookKeep values(4510983450,'F12345');
+insert into bookKeep values(4540983409,'F23456');
+
+insert into officeAdmin values(4247755090,'H12345');
+insert into officeAdmin values(8844509349, 'H23456');
+
+
+
+insert into patient values('AB1234','Benjamin', 'OOP');
+insert into patient values ('AB3456', 'Lily','INS');
+
+insert into diagnosis values('C12345','sore throat','AB1234');
+insert into diagnosis values('C23456','sprained ankle','AB3456');
+
+insert into visit values('GH1234','Body ache','C12345','AB1234',1234567891);
+insert into visit values('GH2345','Injury','C23456','AB3456',2345678912);
+
+insert into bill values(4325667744,200.10, '19-NOV-12','DBC','AB1234',4510983450);
+insert into bill values(4455000912,0.0, '19-DEC-12', 'INS','AB3456',4510983450);
+
+insert into prescription values('cought syrup','AB1234',2233111893, '250ml','Take twice a day','liquid','strong',876345,'12-NOV-19','10-NOV-19');
+insert into prescription values('nothing - rice','AB3456',2230099831,'0g','Everyday for 3 hours','action','strong',000000,'25-NOV-19','20-NOV-19');
+
+insert into sched values('SCH786','AB1234','online','A12345');
+insert into sched values('SCH345','AB3456','office 1','B12345');
+
+
+
+
+--triggers
+set serveroutput on; 
+
+drop table changelog;
+
+create table changelog(
+    change_date        date,
+    chnage_desc        varchar2(50)
+);
+
+--trigger to update patient
+create or replace trigger patient_update
+    after update on patient
+    for each row
+declare
+    v_action        varchar2(50);
+begin 
+    v_action := 'Updated patient on ' || to_char (sysdate, 'YYYY/MM/DD');
+    insert into changelog values (sysdate, v_action);
+
+end; 
+
+--update patient name
+update patient
+set patientName = 'Lily Dog'
+where patientName = 'Lily'; 
+
+--Triggers to insert data into the staff table
+
+create or replace trigger insert_physician
+after insert on physician
+for each row
+declare
+    v_staffid physician.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'PHY');
+end;
+/
+
+create or replace trigger insert_rNurse
+after insert on rnurse
+for each row
+declare
+    v_staffid rnurse.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'RN');
+end;
+/
+
+create or replace trigger insert_npNurse
+after insert on npnurse
+for each row
+declare
+    v_staffid npnurse.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'NP');
+end;
+/
+
+create or replace trigger insert_medTech
+after insert on medtech
+for each row
+declare
+    v_staffid medtech.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'MT');
+end;
+/
+
+create or replace trigger insert_pharma
+after insert on pharma
+for each row
+declare
+    v_staffid pharma.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'PHR');
+end;
+/
+
+create or replace trigger insert_surgeon
+after insert on surgeon
+for each row
+declare
+    v_staffid surgeon.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'SUG');
+end;
+/
+
+create or replace trigger insert_reception
+after insert on reception
+for each row
+declare
+    v_staffid reception.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'REC');
+end;
+/
+
+create or replace trigger insert_bookkeep
+after insert on bookkeep
+for each row
+declare
+    v_staffid bookkeep.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'BK');
+end;
+/
+
+create or replace trigger insert_officeadmin
+after insert on officeadmin
+for each row
+declare
+    v_staffid officeadmin.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'OA');
+end;
+/
+
+insert into officeAdmin values(6378391875, 'H98765');
+
+--procedures 
+--2 procedures with cursors 
+create or replace procedure list_patient
+is
+    p_patientID     varchar(6);
+    p_patientName   varchar(50); 
+    cursor patient_cur is 
+        select patientID, patientName from patient order by patientID; 
+begin
+    open patient_cur;
+     dbms_output.put_line('Patient ID          Patient Name'); 
+     dbms_output.put_line('--------------------------------');
+    loop
+        fetch patient_cur into p_patientID, p_patientName;
+        exit when patient_cur%notfound; 
+        dbms_output.put_line(p_patientID || '  '|| p_patientName ); 
+    end loop;
+    close patient_cur; 
+end; 
+--2 procedures without cursors 
