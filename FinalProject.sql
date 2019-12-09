@@ -249,6 +249,7 @@ begin
     insert into changelog values (sysdate, v_action);
 
 end; 
+/
 
 --update patient name
 update patient
