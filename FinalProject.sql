@@ -386,4 +386,40 @@ begin
     end loop;
     close patient_cur; 
 end; 
+/
+
 --2 procedures without cursors 
+create or replace procedure select_prescription (
+    p_rxNumber            in number
+)
+is 
+    v_drug                  prescription.drug%type;
+    v_patientID             prescription.patientID%type;
+    v_pharmaLicNum          prescription.pharmaLicNum%type;
+    v_amount                prescription.amount%type;
+    v_directions            prescription.directions%type;
+    v_drugForm              prescription.drugForm%type;
+    v_strength              prescription.strength%type;
+    v_dateFilled            prescription.dateFilled%type;
+    v_oDate                 prescription.oDate%type;
+begin
+    select drug,patientID, pharmaLicNum,amount,directions,drugForm,strength,dateFilled, oDate
+    into v_drug,v_patientID, v_pharmaLicNum,v_amount,v_directions,v_drugForm,v_strength,v_dateFilled, v_oDate
+    from prescription 
+    where rxNumber = p_rxNumber;
+   DBMS_OUTPUT.PUT_LINE('Drug           :' || v_drug);
+   DBMS_OUTPUT.PUT_LINE('Patient ID     :'|| v_patientID);
+   DBMS_OUTPUT.PUT_LINE('Pharmacist     :'|| v_pharmaLicNum);
+   DBMS_OUTPUT.PUT_LINE('Quantitiy      :'|| v_amount);
+   DBMS_OUTPUT.PUT_LINE('Directions     :'|| v_directions);
+   DBMS_OUTPUT.PUT_LINE('Drug form      :'|| v_drugForm);
+   DBMS_OUTPUT.PUT_LINE('Strength       :'||v_strength);
+   DBMS_OUTPUT.PUT_LINE('Date Filled    :'||v_dateFilled);
+   DBMS_OUTPUT.PUT_LINE('Original Date  :'||v_oDate);
+exception
+    when no_data_found then
+         DBMS_OUTPUT.PUT_LINE('Drug' || v_drug || ' not found');
+end;
+/
+
+--cursors 
