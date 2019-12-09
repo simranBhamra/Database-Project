@@ -99,6 +99,7 @@ drop table visit cascade constraints;
 create table visit(
     visitID         varchar(6) not null constraint visitID_pk primary key,
     visitType       varchar(20),
+    room            varchar(20),
     diagnosisID     varchar(6),
     constraint fk_diagnosisID_vi foreign key(diagnosisID)
     references diagnosis(diagnosisID),
@@ -127,7 +128,8 @@ create table bill(
     
 drop table prescription cascade constraints;
 create table prescription(
-     drug        varchar(20)not null constraint drug_pk primary key,
+    prescriptionid varchar(6) not null constraint prescription_pk primary key,
+    drug        varchar(20),
     patientID   varchar(6),
     constraint fk_patientID_pr  foreign key(patientID)
     references patient(patientID),
@@ -144,7 +146,6 @@ create table prescription(
     
 );
     
---do we need patient scheduels ?? or should we just have staff which has appts etc?
 drop table sched cascade constraints;
 create table sched(
     schedID     varchar(6)  not null constraint sched_pk primary key,
@@ -152,6 +153,7 @@ create table sched(
     constraint fk_patientID_sc  foreign key(patientID)
     references patient(patientID), 
     apptType        varchar(20),
+    room            varchar(20),
     staffID         varchar(6),
     constraint fk_staffID_sc foreign key(staffID) 
     references staff(staffID)
@@ -222,8 +224,8 @@ insert into bill values(4455000912,0.0, '19-DEC-12', 'INS','AB3456',4510983450);
 insert into prescription values('cought syrup','AB1234',2233111893, '250ml','Take twice a day','liquid','strong',876345,'12-NOV-19','10-NOV-19');
 insert into prescription values('nothing - rice','AB3456',2230099831,'0g','Everyday for 3 hours','action','strong',000000,'25-NOV-19','20-NOV-19');
 
-insert into sched values('SCH786','AB1234','online','A12345');
-insert into sched values('SCH345','AB3456','office 1','B12345');
+insert into sched values('SCH786','AB1234','online', 'N/A', 'A12345');
+insert into sched values('SCH345','AB3456','office 1', 'Operating', 'B12345');
 
 
 
@@ -249,7 +251,6 @@ begin
     insert into changelog values (sysdate, v_action);
 
 end; 
-/
 
 --update patient name
 update patient
@@ -387,40 +388,45 @@ begin
     end loop;
     close patient_cur; 
 end; 
-/
 
 --2 procedures without cursors 
-create or replace procedure select_prescription (
-    p_rxNumber            in number
-)
-is 
-    v_drug                  prescription.drug%type;
-    v_patientID             prescription.patientID%type;
-    v_pharmaLicNum          prescription.pharmaLicNum%type;
-    v_amount                prescription.amount%type;
-    v_directions            prescription.directions%type;
-    v_drugForm              prescription.drugForm%type;
-    v_strength              prescription.strength%type;
-    v_dateFilled            prescription.dateFilled%type;
-    v_oDate                 prescription.oDate%type;
-begin
-    select drug,patientID, pharmaLicNum,amount,directions,drugForm,strength,dateFilled, oDate
-    into v_drug,v_patientID, v_pharmaLicNum,v_amount,v_directions,v_drugForm,v_strength,v_dateFilled, v_oDate
-    from prescription 
-    where rxNumber = p_rxNumber;
-   DBMS_OUTPUT.PUT_LINE('Drug           :' || v_drug);
-   DBMS_OUTPUT.PUT_LINE('Patient ID     :'|| v_patientID);
-   DBMS_OUTPUT.PUT_LINE('Pharmacist     :'|| v_pharmaLicNum);
-   DBMS_OUTPUT.PUT_LINE('Quantitiy      :'|| v_amount);
-   DBMS_OUTPUT.PUT_LINE('Directions     :'|| v_directions);
-   DBMS_OUTPUT.PUT_LINE('Drug form      :'|| v_drugForm);
-   DBMS_OUTPUT.PUT_LINE('Strength       :'||v_strength);
-   DBMS_OUTPUT.PUT_LINE('Date Filled    :'||v_dateFilled);
-   DBMS_OUTPUT.PUT_LINE('Original Date  :'||v_oDate);
-exception
-    when no_data_found then
-         DBMS_OUTPUT.PUT_LINE('Drug' || v_drug || ' not found');
-end;
-/
 
---cursors 
+--Queries
+
+--Patient Monthly Statement
+
+
+--Operating Room Schedule
+select *
+from sched
+where room = 'Operating';
+
+--Operating Room Log (INCOMPLETE)
+select *
+from visit
+where room = 'Operating';
+
+--Daily Delivery Room Log 
+select *
+from visit
+where room = 'Deliery';
+
+-- Recovery Room Log (INCOMPLETE)
+select *
+from visit
+where room = 'Recovery';
+
+-- Monthly Activity Report
+select count(visitid) as NUM_VISITS
+from visit;
+
+select count(visitid) as NUM_SURGERIES
+from visit
+where visittype = 'Surgery';
+
+select count(visitid) as NUM_DELIVERIES
+from visit
+where visittype = 'Deliery';
+
+select count(prescriptionid) as NUM_PRESCRIPTIONS
+from prescription;
