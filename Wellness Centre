@@ -299,3 +299,130 @@ insert into sched values('SCH786','AB1234','online', '19-NOV-12','A12345');
 insert into sched values('SCH345','AB3456','office 1','21-DEC-19','B12345');
 
 
+
+--triggerssq231 
+set serveroutput on; 
+
+drop table changelog;
+
+create table changelog(
+    change_date        date,
+    chnage_desc        varchar2(50)
+);
+
+--trigger to update patient
+create or replace trigger patient_update
+    after update on patient
+    for each row
+declare
+    v_action        varchar2(50);
+begin 
+    v_action := 'Updated patient on ' || to_char (sysdate, 'YYYY/MM/DD');
+    insert into changelog values (sysdate, v_action);
+
+end; 
+
+--update patient name
+update patient
+set patientName = 'Lily Dog'
+where patientName = 'Lily'; 
+
+--trigger to insert employee
+
+
+
+--procedures 
+--2 procedures with cursors  
+create or replace procedure list_patient
+is
+    p_patientID     varchar(6);
+    p_patientName   varchar(50); 
+    cursor patient_cur is 
+        select patientID, patientName from patient order by patientID; 
+begin
+    open patient_cur;
+     dbms_output.put_line('Patient ID          Patient Name'); 
+     dbms_output.put_line('--------------------------------');
+    loop
+        fetch patient_cur into p_patientID, p_patientName;
+        exit when patient_cur%notfound; 
+        dbms_output.put_line(p_patientID || '  '|| p_patientName ); 
+    end loop;
+    close patient_cur; 
+end; 
+/
+
+
+
+--2 procedures without cursors
+create or replace procedure select_prescription (
+    p_rxNumber            in number
+)
+is 
+    v_drug                  prescription.drug%type;
+    v_patientID             prescription.patientID%type;
+    v_pharmaLicNum          prescription.pharmaLicNum%type;
+    v_amount                prescription.amount%type;
+    v_directions            prescription.directions%type;
+    v_drugForm              prescription.drugForm%type;
+    v_strength              prescription.strength%type;
+    v_dateFilled            prescription.dateFilled%type;
+    v_oDate                 prescription.oDate%type;
+begin
+    select drug,patientID, pharmaLicNum,amount,directions,drugForm,strength,dateFilled, oDate
+    into v_drug,v_patientID, v_pharmaLicNum,v_amount,v_directions,v_drugForm,v_strength,v_dateFilled, v_oDate
+    from prescription 
+    where rxNumber = p_rxNumber;
+   DBMS_OUTPUT.PUT_LINE('Drug           :' || v_drug);
+   DBMS_OUTPUT.PUT_LINE('Patient ID     :'|| v_patientID);
+   DBMS_OUTPUT.PUT_LINE('Pharmacist     :'|| v_pharmaLicNum);
+   DBMS_OUTPUT.PUT_LINE('Quantitiy      :'|| v_amount);
+   DBMS_OUTPUT.PUT_LINE('Directions     :'|| v_directions);
+   DBMS_OUTPUT.PUT_LINE('Drug form      :'|| v_drugForm);
+   DBMS_OUTPUT.PUT_LINE('Strength       :'||v_strength);
+   DBMS_OUTPUT.PUT_LINE('Date Filled    :'||v_dateFilled);
+   DBMS_OUTPUT.PUT_LINE('Original Date  :'||v_oDate);
+exception
+    when no_data_found then
+         DBMS_OUTPUT.PUT_LINE('Drug' || v_drug || ' not found');
+end;
+/
+
+
+--cursors 
+DECLARE
+  ph_physicianID          physician.docLicNum%TYPE;
+  ph_email                physician.email%TYPE;
+  ph_telephone            physician.telephone%TYPE;
+  ph_staffID              physician.staffID%TYPE;
+
+  CURSOR physician_cursor IS  -- declaring a cursor
+    SELECT docLicNum,
+           email,
+           telephone,
+           staffID
+    FROM   physician;
+
+BEGIN
+  OPEN physician_cursor;    -- opening the cursor
+  LOOP
+    FETCH physician_cursor  -- fetching records from the cursor
+    INTO  
+        ph_physicianID,      
+        ph_email,       
+        ph_telephone,
+        ph_staffID;
+    EXIT
+  WHEN physician_cursor%notfound;
+  dbms_output.put_line('physician not found');
+
+  END LOOP;
+  CLOSE physician_cursor;  --closing the cursor
+END;
+/
+
+
+
+
+
+
