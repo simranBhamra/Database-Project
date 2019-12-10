@@ -195,28 +195,28 @@ create table dRoom (
 );
 
 
-drop table rRoom cascade constraints;
-create table rRoom (
-    recRoomID       number(2) not null constraint rRoom_pk primary key,
-    patientName     varchar(5),
-    constraint fk_patientName_rr foreign key (patientName)
-    references patient(patientName),
+drop table recRoom cascade constraints;
+create table recRoom(
+    recRoomID       number(2) not null constraint roomID_pk primary key,
+    bedID           number(3),
+    dateIn          date,
+    dateOut         date,
+    signPrac        varchar(50),
+    checkupDes      varchar(200),
+    patientID       varchar(6),
+    constraint fk_patientID_rr foreign key(patientID)
+    references patient(patientID),
     
-     npLicNum    number(10),
+    docLicNum       number(10),
+    constraint fk_docLicNum_rr foreign key(docLicNum)
+    references physician(docLicNum),
+    
+    
+    npLicNum    number(10),
     constraint  fk_npLicNum_rr foreign key(npLicNum)
-    references npNurse(npLicNum),
+    references npNurse(npLicNum)
     
-    docLicNum number(10),
-    constraint fk_docLicNum_rr foreign key (docLicNum)
-    references physician(docLicNum), 
-    
-    bedNum      number(2),
-    dateIn      date,
-    dateOut     date,
-    signedDoc   varchar(50), --doc just types in name to sign 
-    checkup     varchar(200) --check up description
-
-);
+); 
 
 drop table monthlyReport cascade constraints;
 create table monthlyReport(
