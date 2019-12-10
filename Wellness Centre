@@ -1,4 +1,4 @@
---droppping and creating tables
+-droppping and creating tables
 drop table staff cascade constraints; 
 create table staff(
     staffID     varchar(6) not null constraint staffID_pk primary key,
@@ -83,7 +83,8 @@ drop table patient cascade constraints;
 create table patient(
     patientID       varchar(6) not null constraint patientID_pk primary key,
     patientName     varchar(50),
-    abillityToPay   char(3)
+    abillityToPay   char(3),
+    visitNo         number(3)
 );
 
 drop table diagnosis cascade constraints;
@@ -144,7 +145,7 @@ create table prescription(
     
 );
     
---do we need patient scheduels ?? or should we just have staff which has appts etc?
+
 drop table sched cascade constraints;
 create table sched(
     schedID     varchar(6)  not null constraint sched_pk primary key,
@@ -152,10 +153,80 @@ create table sched(
     constraint fk_patientID_sc  foreign key(patientID)
     references patient(patientID), 
     apptType        varchar(20),
+    apptDate        date,
     staffID         varchar(6),
     constraint fk_staffID_sc foreign key(staffID) 
     references staff(staffID)
 );
+
+
+drop table operatingRoomSch cascade constraints;
+create table operatingRoomSch (
+    surgeryRoom     number(2) not null constraint surgeryRoom_pk primary key, 
+    surgeryID       number(4) , 
+    surgery         varchar(20),
+    sDateTimeOR       date,  
+    patientID       varchar(6),
+    constraint fk_patientID_or foreign key(patientID)
+    references patient(patientID),
+    
+    surgeonLicNum number(10),
+    constraint fk_surgeonLicNum_or foreign key (surgeonLicNum)
+    references surgeon(surgeonLicNum),
+    
+    rnLicNum    number(10),
+    constraint  fk_rnLicNum_or foreign key(rnLicNum)
+    references rNurse(rnLicNum),
+    
+    npLicNum    number(10),
+    constraint  fk_npLicNum_or foreign key(npLicNum)
+    references npNurse(npLicNum),
+    
+    observations        varchar(200)
+);
+
+drop table dRoom cascade constraints;
+create table dRoom (
+    roomID      number(2) not null constraint room_pk primary key,
+     patientID       varchar(6),
+    constraint fk_patientID_dr foreign key(patientID)
+    references patient(patientID),
+    delDate     date
+);
+
+
+drop table rRoom cascade constraints;
+create table rRoom (
+    recRoomID       number(2) not null constraint rRoom_pk primary key,
+    patientName     varchar(5),
+    constraint fk_patientName_rr foreign key (patientName)
+    references patient(patientName),
+    
+     npLicNum    number(10),
+    constraint  fk_npLicNum_rr foreign key(npLicNum)
+    references npNurse(npLicNum),
+    
+    docLicNum number(10),
+    constraint fk_docLicNum_rr foreign key (docLicNum)
+    references physician(docLicNum), 
+    
+    bedNum      number(2),
+    dateIn      date,
+    dateOut     date,
+    signedDoc   varchar(50), --doc just types in name to sign 
+    checkup     varchar(200) --check up description
+
+);
+
+drop table monthlyReport cascade constraints;
+create table monthlyReport(
+    totalVisits     number(4),
+    totalSurgery    number(4),
+    totalDel         number(4),
+    totalDrugs       number(4),
+    avgTime          number(4)
+);
+
 
 
 --loading values into tables
@@ -207,8 +278,8 @@ insert into officeAdmin values(8844509349, 'H23456');
 
 
 
-insert into patient values('AB1234','Benjamin', 'OOP');
-insert into patient values ('AB3456', 'Lily','INS');
+insert into patient values('AB1234','Benjamin', 'OOP',4);
+insert into patient values ('AB3456', 'Lily','INS',2);
 
 insert into diagnosis values('C12345','sore throat','AB1234');
 insert into diagnosis values('C23456','sprained ankle','AB3456');
@@ -222,66 +293,9 @@ insert into bill values(4455000912,0.0, '19-DEC-12', 'INS','AB3456',4510983450);
 insert into prescription values('cought syrup','AB1234',2233111893, '250ml','Take twice a day','liquid','strong',876345,'12-NOV-19','10-NOV-19');
 insert into prescription values('nothing - rice','AB3456',2230099831,'0g','Everyday for 3 hours','action','strong',000000,'25-NOV-19','20-NOV-19');
 
-insert into sched values('SCH786','AB1234','online','A12345');
-insert into sched values('SCH345','AB3456','office 1','B12345');
 
 
-
-
---triggers
-set serveroutput on; 
-
-drop table changelog;
-
-create table changelog(
-    change_date        date,
-    chnage_desc        varchar2(50)
-);
-
---trigger to update patient
-create or replace trigger patient_update
-    after update on patient
-    for each row
-declare
-    v_action        varchar2(50);
-begin 
-    v_action := 'Updated patient on ' || to_char (sysdate, 'YYYY/MM/DD');
-    insert into changelog values (sysdate, v_action);
-
-end; 
-
---update patient name
-update patient
-set patientName = 'Lily Dog'
-where patientName = 'Lily'; 
-
---trigger to insert employee
-
-
-
---procedures 
---2 procedures with cursors 
-create or replace procedure list_patient
-is
-    p_patientID     varchar(6);
-    p_patientName   varchar(50); 
-    cursor patient_cur is 
-        select patientID, patientName from patient order by patientID; 
-begin
-    open patient_cur;
-     dbms_output.put_line('Patient ID          Patient Name'); 
-     dbms_output.put_line('--------------------------------');
-    loop
-        fetch patient_cur into p_patientID, p_patientName;
-        exit when patient_cur%notfound; 
-        dbms_output.put_line(p_patientID || '  '|| p_patientName ); 
-    end loop;
-    close patient_cur; 
-end; 
---2 procedures without cursors 
-
---cursors 
-
-
+insert into sched values('SCH786','AB1234','online', '19-NOV-12','A12345');
+insert into sched values('SCH345','AB3456','office 1','21-DEC-19','B12345');
 
 
