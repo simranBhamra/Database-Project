@@ -329,7 +329,117 @@ where patientName = 'Lily';
 
 --trigger to insert employee
 
+--Triggers to insert data into the staff table
 
+create or replace trigger insert_physician
+after insert on physician
+for each row
+declare
+    v_staffid physician.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'PHY');
+end;
+/
+
+create or replace trigger insert_rNurse
+after insert on rnurse
+for each row
+declare
+    v_staffid rnurse.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'RN');
+end;
+/
+
+create or replace trigger insert_npNurse
+after insert on npnurse
+for each row
+declare
+    v_staffid npnurse.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'NP');
+end;
+/
+
+create or replace trigger insert_medTech
+after insert on medtech
+for each row
+declare
+    v_staffid medtech.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'MT');
+end;
+/
+
+create or replace trigger insert_pharma
+after insert on pharma
+for each row
+declare
+    v_staffid pharma.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'PHR');
+end;
+/
+
+create or replace trigger insert_surgeon
+after insert on surgeon
+for each row
+declare
+    v_staffid surgeon.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'SUG');
+end;
+/
+
+create or replace trigger insert_reception
+after insert on reception
+for each row
+declare
+    v_staffid reception.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'REC');
+end;
+/
+
+create or replace trigger insert_bookkeep
+after insert on bookkeep
+for each row
+declare
+    v_staffid bookkeep.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'BK');
+end;
+/
+
+create or replace trigger insert_officeadmin
+after insert on officeadmin
+for each row
+declare
+    v_staffid officeadmin.staffid%type;
+    v_action varchar2(50);
+begin
+    v_staffid := :new.staffid;
+    insert into staff values(v_staffid, 'OA');
+end;
+/
+
+insert into officeAdmin values(6378391875, 'H98765');
 
 --procedures 
 --2 procedures with cursors  
@@ -421,6 +531,45 @@ BEGIN
 END;
 /
 
+--Queries
+
+--Patient Monthly Statement
+
+
+--Operating Room Schedule
+select *
+from sched
+where room = 'Operating';
+
+--Operating Room Log (INCOMPLETE)
+select *
+from visit
+where room = 'Operating';
+
+--Daily Delivery Room Log 
+select *
+from visit
+where room = 'Deliery';
+
+-- Recovery Room Log (INCOMPLETE)
+select *
+from visit
+where room = 'Recovery';
+
+-- Monthly Activity Report
+select count(visitid) as NUM_VISITS
+from visit;
+
+select count(visitid) as NUM_SURGERIES
+from visit
+where visittype = 'Surgery';
+
+select count(visitid) as NUM_DELIVERIES
+from visit
+where visittype = 'Deliery';
+
+select count(prescriptionid) as NUM_PRESCRIPTIONS
+from prescription;
 
 
 
