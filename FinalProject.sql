@@ -1,3 +1,8 @@
+/*  Simran Bhamra and Anthony Hessler
+    CS360- Database Analyisis & Design
+    Final Project - Wellness Clinic
+*/
+
 --droppping and creating tables
 drop table staff cascade constraints; 
 create table staff(
@@ -9,7 +14,7 @@ drop table physician cascade constraints;
 create table physician(
     docLicNum       number(10) not null constraint docLicNum_pk primary key,
     email           varchar(20),
-    telephone       number(9),
+    telephone       number(10),
     staffID         varchar (6),
     constraint fk_staffID_d foreign key(staffID) 
     references staff(staffID)
@@ -83,7 +88,8 @@ drop table patient cascade constraints;
 create table patient(
     patientID       varchar(6) not null constraint patientID_pk primary key,
     patientName     varchar(50),
-    abillityToPay   char(3)
+    abillityToPay   char(3),
+    visitNo         number(3)
 );
 
 drop table diagnosis cascade constraints;
@@ -99,7 +105,6 @@ drop table visit cascade constraints;
 create table visit(
     visitID         varchar(6) not null constraint visitID_pk primary key,
     visitType       varchar(20),
-    room            varchar(20),
     diagnosisID     varchar(6),
     constraint fk_diagnosisID_vi foreign key(diagnosisID)
     references diagnosis(diagnosisID),
@@ -128,8 +133,7 @@ create table bill(
     
 drop table prescription cascade constraints;
 create table prescription(
-    prescriptionid varchar(6) not null constraint prescription_pk primary key,
-    drug        varchar(20),
+     drug        varchar(20)not null constraint drug_pk primary key,
     patientID   varchar(6),
     constraint fk_patientID_pr  foreign key(patientID)
     references patient(patientID),
@@ -146,6 +150,7 @@ create table prescription(
     
 );
     
+
 drop table sched cascade constraints;
 create table sched(
     schedID     varchar(6)  not null constraint sched_pk primary key,
@@ -153,10 +158,87 @@ create table sched(
     constraint fk_patientID_sc  foreign key(patientID)
     references patient(patientID), 
     apptType        varchar(20),
-    room            varchar(20),
+    apptDate        date,
     staffID         varchar(6),
     constraint fk_staffID_sc foreign key(staffID) 
     references staff(staffID)
+);
+
+
+drop table operatingRoomSch cascade constraints;
+create table operatingroomsch(
+    surgeryID       number(4) not null constraint oroomsch_pk primary key,
+    surgerydate     date,
+    surgerydescription     varchar(20),
+    patientID       varchar(6),
+    constraint fk_patientID_ors foreign key(patientID)
+    references patient(patientID),
+    
+    surgeonLicNum number(10),
+    constraint fk_surgeonLicNum_ors foreign key (surgeonLicNum)
+    references surgeon(surgeonLicNum)
+);
+
+drop table operatingroomlog cascade constraints;
+create table operatingroomlog (
+    surgeryRoom     number(2) not null constraint surgeryRoom_pk primary key, 
+    surgeryID       number(4) , 
+    surgerydescription         varchar(20),
+    sDateTimeOR       date,  
+    patientID       varchar(6),
+    constraint fk_patientID_orl foreign key(patientID)
+    references patient(patientID),
+    
+    surgeonLicNum number(10),
+    constraint fk_surgeonLicNum_orl foreign key (surgeonLicNum)
+    references surgeon(surgeonLicNum),
+    
+    rnLicNum    number(10),
+    constraint  fk_rnLicNum_orl foreign key(rnLicNum)
+    references rNurse(rnLicNum),
+    
+    npLicNum    number(10),
+    constraint  fk_npLicNum_orl foreign key(npLicNum)
+    references npNurse(npLicNum),
+    
+    observations        varchar(200)
+);
+
+drop table dRoom cascade constraints;
+create table dRoom (
+    roomID      number(2) not null constraint droom_pk primary key,
+     patientID       varchar(6),
+    constraint fk_patientID_dr foreign key(patientID)
+    references patient(patientID),
+    delDate     date
+);
+
+
+drop table recRoom cascade constraints;
+create table recRoom(
+    recRoomID       number(2) not null constraint recroom_pk primary key,
+    bedID           number(3),
+    dateIn          date,
+    dateOut         date,
+    signPrac        varchar(50),
+    checkupDes      varchar(200),
+    patientID       varchar(6),
+    constraint fk_patientID_rr foreign key(patientID)
+    references patient(patientID),
+    npLicNum    number(10),
+    constraint  fk_npLicNum_rr foreign key(npLicNum)
+    references npNurse(npLicNum)
+    
+); 
+
+drop table monthlyReport cascade constraints;
+create table monthlyReport(
+    monthYear       char(7) not null constraint report_pk primary key,
+    totalVisits     number(4),
+    totalSurgery    number(4),
+    totalDel         number(4),
+    totalDrugs       number(4),
+    avgTime          varchar(10)
 );
 
 
@@ -207,16 +289,14 @@ insert into bookKeep values(4540983409,'F23456');
 insert into officeAdmin values(4247755090,'H12345');
 insert into officeAdmin values(8844509349, 'H23456');
 
-
-
-insert into patient values('AB1234','Benjamin', 'OOP');
-insert into patient values ('AB3456', 'Lily','INS');
+insert into patient values('AB1234','Benjamin', 'OOP',4);
+insert into patient values ('AB3456', 'Lily','INS',2);
 
 insert into diagnosis values('C12345','sore throat','AB1234');
 insert into diagnosis values('C23456','sprained ankle','AB3456');
 
-insert into visit values('GH1234','Body ache','C12345','AB1234',1234567891);
-insert into visit values('GH2345','Injury','C23456','AB3456',2345678912);
+insert into visit values('GH1234','Delivery', 'C12345','AB1234',1234567891);
+insert into visit values('GH2345','Surgery', 'C23456','AB3456',2345678912);
 
 insert into bill values(4325667744,200.10, '19-NOV-12','DBC','AB1234',4510983450);
 insert into bill values(4455000912,0.0, '19-DEC-12', 'INS','AB3456',4510983450);
@@ -224,13 +304,43 @@ insert into bill values(4455000912,0.0, '19-DEC-12', 'INS','AB3456',4510983450);
 insert into prescription values('cought syrup','AB1234',2233111893, '250ml','Take twice a day','liquid','strong',876345,'12-NOV-19','10-NOV-19');
 insert into prescription values('nothing - rice','AB3456',2230099831,'0g','Everyday for 3 hours','action','strong',000000,'25-NOV-19','20-NOV-19');
 
-insert into sched values('SCH786','AB1234','online', 'N/A', 'A12345');
-insert into sched values('SCH345','AB3456','office 1', 'Operating', 'B12345');
+insert into sched values('SCH786','AB1234','online', '19-NOV-12','A12345');
+insert into sched values('SCH345','AB3456','office 1','21-DEC-19','B12345');
 
+insert into operatingroomsch values(5824, sysdate,'Appendectomy','AB1234',2223987734);
 
+insert into operatingroomlog values(02, 5824, 'Appendectomy', sysdate, 'AB1234', 2223987734, 3456789123, 3958672349, 'Incredibly simple procedure');
 
+insert into droom values(03, 'AB3456', sysdate);
 
---triggers
+insert into recroom values(04, 106, sysdate, '10-DEC-2019', 'Dr. Gupta', 'No medical checks performed', 'AB1234', 4859681230);
+
+insert into monthlyreport values('NOV2019', 27, 2, 6, 18, '1d 3h 45m');
+
+--Queries
+
+--Operating Room Schedule
+select *
+from operatingroomsch;
+
+--Operating Room Log (INCOMPLETE)
+select *
+from operatingroomlog;
+
+--Daily Delivery Room Log 
+select *
+from droom;
+
+-- Recovery Room Log (INCOMPLETE)
+select *
+from recroom;
+
+-- Monthly Activity Report
+select *
+from monthlyreport;
+
+--Triggers
+
 set serveroutput on; 
 
 drop table changelog;
@@ -370,7 +480,7 @@ end;
 insert into officeAdmin values(6378391875, 'H98765');
 
 --procedures 
---2 procedures with cursors 
+--2 procedures with cursors  
 create or replace procedure list_patient
 is
     p_patientID     varchar(6);
@@ -388,45 +498,94 @@ begin
     end loop;
     close patient_cur; 
 end; 
+/
 
---2 procedures without cursors 
+create or replace procedure list_physician
+is
+  ph_physicianid          physician.doclicnum%type;
+  ph_email                physician.email%type;
+  ph_telephone            physician.telephone%type;
+  ph_staffid              physician.staffid%type;
 
---Queries
+  cursor physician_cursor is  -- declaring a cursor
+    select doclicnum,
+           email,
+           telephone,
+           staffid
+    from   physician;
 
---Patient Monthly Statement
+begin
+  open physician_cursor;    -- opening the cursor
+  loop
+    fetch physician_cursor  -- fetching records from the cursor
+    into  
+        ph_physicianid,      
+        ph_email,       
+        ph_telephone,
+        ph_staffid;
+    exit
+  when physician_cursor%notfound;
+  dbms_output.put_line('physician not found');
+
+  end loop;
+  close physician_cursor;  --closing the cursor
+end;
+/
 
 
---Operating Room Schedule
-select *
-from sched
-where room = 'Operating';
+--2 procedures without cursors
+create or replace procedure select_prescription (
+    p_rxNumber            in number
+)
+is 
+    v_drug                  prescription.drug%type;
+    v_patientID             prescription.patientID%type;
+    v_pharmaLicNum          prescription.pharmaLicNum%type;
+    v_amount                prescription.amount%type;
+    v_directions            prescription.directions%type;
+    v_drugForm              prescription.drugForm%type;
+    v_strength              prescription.strength%type;
+    v_dateFilled            prescription.dateFilled%type;
+    v_oDate                 prescription.oDate%type;
+begin
+    select drug,patientID, pharmaLicNum,amount,directions,drugForm,strength,dateFilled, oDate
+    into v_drug,v_patientID, v_pharmaLicNum,v_amount,v_directions,v_drugForm,v_strength,v_dateFilled, v_oDate
+    from prescription 
+    where rxNumber = p_rxNumber;
+   DBMS_OUTPUT.PUT_LINE('Drug           :' || v_drug);
+   DBMS_OUTPUT.PUT_LINE('Patient ID     :'|| v_patientID);
+   DBMS_OUTPUT.PUT_LINE('Pharmacist     :'|| v_pharmaLicNum);
+   DBMS_OUTPUT.PUT_LINE('Quantitiy      :'|| v_amount);
+   DBMS_OUTPUT.PUT_LINE('Directions     :'|| v_directions);
+   DBMS_OUTPUT.PUT_LINE('Drug form      :'|| v_drugForm);
+   DBMS_OUTPUT.PUT_LINE('Strength       :'||v_strength);
+   DBMS_OUTPUT.PUT_LINE('Date Filled    :'||v_dateFilled);
+   DBMS_OUTPUT.PUT_LINE('Original Date  :'||v_oDate);
+exception
+    when no_data_found then
+         DBMS_OUTPUT.PUT_LINE('Drug' || v_drug || ' not found');
+end;
+/
 
---Operating Room Log (INCOMPLETE)
-select *
-from visit
-where room = 'Operating';
-
---Daily Delivery Room Log 
-select *
-from visit
-where room = 'Deliery';
-
--- Recovery Room Log (INCOMPLETE)
-select *
-from visit
-where room = 'Recovery';
-
--- Monthly Activity Report
-select count(visitid) as NUM_VISITS
-from visit;
-
-select count(visitid) as NUM_SURGERIES
-from visit
-where visittype = 'Surgery';
-
-select count(visitid) as NUM_DELIVERIES
-from visit
-where visittype = 'Deliery';
-
-select count(prescriptionid) as NUM_PRESCRIPTIONS
-from prescription;
+create or replace procedure select_visit (p_visitid in varchar)
+is
+    v_type          visit.visittype%type;
+    v_diagnosis     visit.diagnosisid%type;
+    v_patient       visit.patientid%type;
+    v_physician     visit.doclicnum%type;
+begin
+    select visittype, diagnosisid, patientid, doclicnum
+    into v_type, v_diagnosis, v_patient, v_physician
+    from visit
+    where visitid = p_visitid;
+    
+    dbms_output.put_line('Visit ID:     ' || p_visitid);
+    dbms_output.put_line('Visit Type:     ' || v_type);
+    dbms_output.put_line('Diagnosis ID:     ' || v_diagnosis);
+    dbms_output.put_line('Patient ID:     ' || v_patient);
+    dbms_output.put_line('Physician ID:     ' || v_physician);
+exception
+    when no_data_found then
+         DBMS_OUTPUT.PUT_LINE('Visit' || p_visitid || ' not found');
+end;
+/
